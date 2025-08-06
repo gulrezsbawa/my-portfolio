@@ -6,7 +6,6 @@ import {
   Footer,
   Main,
   Navigation,
-  Project,
   Timeline,
 } from "./components";
 import React, { useEffect, useState } from "react";
