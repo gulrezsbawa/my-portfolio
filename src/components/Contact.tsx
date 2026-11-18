@@ -1,6 +1,6 @@
 import "../assets/styles/Contact.scss";
 
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -12,46 +12,77 @@ function Contact() {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [message, setMessage] = useState<string>("");
+  const [isSending, setIsSending] = useState<boolean>(false);
+  const [submitFeedback, setSubmitFeedback] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
 
   const [nameError, setNameError] = useState<boolean>(false);
   const [emailError, setEmailError] = useState<boolean>(false);
   const [messageError, setMessageError] = useState<boolean>(false);
 
-  const form = useRef();
-
-  const sendEmail = (e: any) => {
+  const sendEmail = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    setNameError(name === "");
-    setEmailError(email === "");
-    setMessageError(message === "");
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    const trimmedMessage = message.trim();
+    const hasNameError = trimmedName.length === 0;
+    const hasEmailError = trimmedEmail.length === 0;
+    const hasMessageError = trimmedMessage.length === 0;
 
-    if (name !== "" && email !== "" && message !== "") {
-      var templateParams = {
-        name: name,
-        email: email,
-        message: message,
-      };
+    setNameError(hasNameError);
+    setEmailError(hasEmailError);
+    setMessageError(hasMessageError);
+    setSubmitFeedback(null);
 
-      console.log(templateParams);
-      emailjs
-        .send(
-          process.env.REACT_APP_EMAILJS_SERVICE_ID!,
-          process.env.REACT_APP_EMAILJS_TEMPLATE_ID!,
-          templateParams,
-          process.env.REACT_APP_EMAILJS_PUBLIC_KEY!
-        )
-        .then(
-          (response) => {
-            console.log("SUCCESS!", response.status, response.text);
-          },
-          (error) => {
-            console.log("FAILED...", error);
-          }
-        );
+    if (hasNameError || hasEmailError || hasMessageError) {
+      return;
+    }
+
+    const serviceId = process.env.REACT_APP_EMAILJS_SERVICE_ID;
+    const templateId = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
+    const publicKey = process.env.REACT_APP_EMAILJS_PUBLIC_KEY;
+
+    if (!serviceId || !templateId || !publicKey) {
+      setSubmitFeedback({
+        type: "error",
+        message:
+          "The contact form is not configured yet. Please email me directly.",
+      });
+      return;
+    }
+
+    setIsSending(true);
+
+    try {
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          name: trimmedName,
+          email: trimmedEmail,
+          message: trimmedMessage,
+        },
+        publicKey,
+      );
       setName("");
       setEmail("");
       setMessage("");
+      setSubmitFeedback({
+        type: "success",
+        message:
+          "Your message was sent successfully. Thank you for reaching out!",
+      });
+    } catch {
+      setSubmitFeedback({
+        type: "error",
+        message:
+          "Your message could not be sent. Please email me directly or try again later.",
+      });
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -65,16 +96,16 @@ function Contact() {
             happen!
           </p>
           <Box
-            ref={form}
             component="form"
             noValidate
             autoComplete="off"
             className="contact-form"
+            onSubmit={sendEmail}
           >
             <div className="form-flex z-50">
               <TextField
                 required
-                id="outlined-required"
+                id="contact-name"
                 label="Your Name"
                 sx={{
                   "& .MuiInputBase-input": {
@@ -86,13 +117,15 @@ function Contact() {
                 value={name}
                 onChange={(e) => {
                   setName(e.target.value);
+                  setNameError(false);
+                  setSubmitFeedback(null);
                 }}
                 error={nameError}
                 helperText={nameError ? "Please enter your name" : ""}
               />
               <TextField
                 required
-                id="outlined-required"
+                id="contact-email"
                 className="z-50"
                 sx={{
                   "& .MuiInputBase-input": {
@@ -104,6 +137,8 @@ function Contact() {
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
+                  setEmailError(false);
+                  setSubmitFeedback(null);
                 }}
                 error={emailError}
                 helperText={
@@ -113,7 +148,7 @@ function Contact() {
             </div>
             <TextField
               required
-              id="outlined-multiline-static"
+              id="contact-message"
               sx={{
                 "& .MuiInputBase-input": {
                   zIndex: 50,
@@ -127,16 +162,31 @@ function Contact() {
               value={message}
               onChange={(e) => {
                 setMessage(e.target.value);
+                setMessageError(false);
+                setSubmitFeedback(null);
               }}
               error={messageError}
               helperText={messageError ? "Please enter the message" : ""}
             />
+            {submitFeedback && (
+              <p
+                className={`contact-feedback ${submitFeedback.type}`}
+                role={submitFeedback.type === "error" ? "alert" : "status"}
+                aria-live="polite"
+              >
+                {submitFeedback.message}{" "}
+                {submitFeedback.type === "error" && (
+                  <a href="mailto:bawagulrez@gmail.com">bawagulrez@gmail.com</a>
+                )}
+              </p>
+            )}
             <Button
+              type="submit"
               variant="contained"
               endIcon={<SendIcon />}
-              onClick={sendEmail}
+              disabled={isSending}
             >
-              Send
+              {isSending ? "Sending..." : "Send"}
             </Button>
           </Box>
         </div>

@@ -9,10 +9,9 @@ function Main() {
     <div className="container">
       <div className="about-section">
         <div className="image-wrapper">
-          <img
-            src="https://media.licdn.com/dms/image/v2/D5603AQEEzx4OvxjWGg/profile-displayphoto-shrink_800_800/B56Zdiqia3GQAg-/0/1749707008770?e=1757548800&v=beta&t=ZFbdKuOapGTCs5O4CxmLSnLeVXKdtpSxDINzPWxMW5s"
-            alt="Avatar"
-          />
+          <div className="avatar-placeholder" aria-label="Gulrez Bawa">
+            GB
+          </div>
         </div>
         <div className="content">
           <div className="social_icons">
@@ -32,18 +31,34 @@ function Main() {
             </a>
           </div>
           <h1>Gulrez Bawa</h1>
-          <p>Senior Software Engineer</p>
+          <p className="resume-headline">
+            Senior Software Engineer | Frontend Architecture | React &amp;
+            TypeScript
+          </p>
+          <p className="resume-summary">
+            Senior software engineer with 10+ years of experience delivering
+            financial-services and SaaS applications. I bring staff-level
+            technical leadership through architecture ownership, reusable
+            engineering standards, performance and quality strategy, and
+            cross-functional collaboration—while staying hands-on with React and
+            TypeScript.
+          </p>
+          <div className="hero-contact">
+            <span>Calgary, AB</span>
+            <a href="tel:+18258897425">(825) 889-7425</a>
+            <a href="mailto:bawagulrez@gmail.com">bawagulrez@gmail.com</a>
+          </div>
 
           <div className="mobile_social_icons">
             <a
-              href="https://github.com/yujisatojr"
+              href="https://github.com/gulrezsbawa/"
               target="_blank"
               rel="noreferrer"
             >
               <GitHubIcon />
             </a>
             <a
-              href="https://www.linkedin.com/in/yujisato/"
+              href="https://www.linkedin.com/in/gulrezbawa/"
               target="_blank"
               rel="noreferrer"
             >

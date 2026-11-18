@@ -23,17 +23,7 @@ function Footer() {
           <LinkedInIcon />
         </a>
       </div>
-      <p>
-        A portfolio designed & built by
-        <a
-          href="https://github.com/yujisatojr/react-portfolio-template"
-          target="_blank"
-          rel="noreferrer"
-          style={{ paddingLeft: "0.25rem" }}
-        >
-          Gulrez Bawa
-        </a>
-      </p>
+      <p>Gulrez Bawa · Senior Software Engineer · Calgary, AB</p>
     </footer>
   );
 }
