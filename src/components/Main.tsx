@@ -45,6 +45,7 @@ function Main() {
           </p>
           <div className="hero-contact">
             <span>Calgary, AB</span>
+            <a href="https://gulrezbawa.com">gulrezbawa.com</a>
             <a href="tel:+18258897425">(825) 889-7425</a>
             <a href="mailto:bawagulrez@gmail.com">bawagulrez@gmail.com</a>
           </div>

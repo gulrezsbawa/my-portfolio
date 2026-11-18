@@ -6,6 +6,7 @@ import {
   Footer,
   Main,
   Navigation,
+  Project,
   Timeline,
 } from "./components";
 import React, { useEffect, useState } from "react";
@@ -38,7 +39,7 @@ function App() {
         <Main />
         <Expertise />
         <Timeline />
-        {/* <Project /> */}
+        <Project />
         <Contact />
       </FadeIn>
       <Footer />
